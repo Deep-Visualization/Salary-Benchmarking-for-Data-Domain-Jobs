@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Experience Level vs Job Category</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="theme.css">
     <style>
         body {
             display: flex;
@@ -12,12 +13,12 @@
             min-height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #eef2f3;
+            background-color: var(--page);
         }
 
         header {
             width: 100%;
-            background-color: #007ACC;
+            background-color: var(--gill);
             color: white;
             text-align: center;
             padding: 20px 0;
@@ -26,6 +27,7 @@
         }
 
         header h1 {
+            color: #FFFFFF;
             margin: 0;
             font-size: 24px;
         }
@@ -44,7 +46,7 @@
             align-items: flex-start;
             padding: 20px;
             margin: 0;
-            background-color: #ffffff;
+            background-color: var(--surface);
             border-right: 1px solid #ccc;
         }
 
@@ -73,7 +75,7 @@
             flex-direction: column;
             align-items: flex-start;
             padding: 20px;
-            background-color: #ffffff;
+            background-color: var(--surface);
             border-left: 1px solid #ccc;
         }
 
@@ -96,7 +98,7 @@
 
         svg {
             font: 10px sans-serif;
-            background-color: #f9f9f9;
+            background-color: var(--surface);
             border: 1px solid #ddd;
             border-radius: 8px;
         }

@@ -1,30 +1,387 @@
-/* =========================================================
-   Theme: Grey and white mushroom
-   Shared by every page. Change a color here and it updates
-   the page colors across the whole site. Map and chart colors
-   are set in their own .js files and are not affected.
-   ========================================================= */
-:root {
-    --page:    #FFFFFF;  /* white cap: page background */
-    --surface: #F7F7F6;  /* off-white: chart and card background */
-    --stem:    #DEDDDB;  /* light grey: borders */
-    --cap:     #8E8D8A;  /* mushroom grey: details */
-    --gill:    #5F5E5B;  /* dark grey: buttons and title bar */
-    --gill-dark: #43423F;/* button hover */
-    --muted:   #595856;  /* secondary text */
-    --soil:    #2E2D2B;  /* main text */
-    --accent:  #2E2D2B;  /* selected buttons and links */
+/* One scrolling page. (Before: height: 100% on both html and body, plus overflow-x: hidden,
+   made two scroll areas inside each other, so the page kept scrolling into empty space
+   after the last chart.) */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    font-family: Arial, sans-serif;
 }
 
-body {
+/* Stops sideways scrolling. Set on html only, so the browser window stays the one scroll area. */
+html {
+    overflow-x: hidden;
+}
+
+body > div > p,
+.content p,
+.graph-text p,
+.Text3 p {
+    line-height: 1.6;
+}
+
+/* Title bar across the top of the page */
+.title-bar {
+    background-color: var(--gill);
+    padding: 22px 20px;
+    border-bottom: 4px solid var(--stem);
+}
+
+.title-bar h1 {
+    margin: 0;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 28px;
+    line-height: 1.3;
+}
+
+.intro {
+    padding: 0 20px;
+}
+
+svg * {
+    pointer-events: all;
+}
+
+.visualization-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
     background-color: var(--page);
-    color: var(--soil);
 }
 
-h1, h2, h3 {
-    color: var(--soil);
+#map, #bargraph, #piechart, #histogram, #parallelPlot {
+    flex: 0 0 auto;
+    padding: 10px;
+    background-color: var(--surface);
+    border-radius: 8px;
+    border: 1px solid var(--stem);
+    margin: 10px;
+    overflow: hidden;
 }
 
-a {
-    color: var(--accent);
+/* Map: sized by its viewBox so it scales with the screen instead of being cropped */
+#map {
+    position: relative;
+    height: auto;
+    max-width: 1100px;
+    margin: 10px auto;
+}
+
+#mapSVG {
+    display: block;
+    width: 100%;
+    height: auto;
+    cursor: grab;
+}
+
+#mapSVG:active {
+    cursor: grabbing;
+}
+
+/* Map legend keeps the original white box and grey border */
+.map-legend {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px 10px;
+    font-size: 12px;
+    color: #333;
+}
+
+.map-legend h4 {
+    margin: 0 0 6px;
+    font-size: 12px;
+    color: #000;
+}
+
+.map-legend .row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 3px;
+}
+
+.map-legend .swatch {
+    width: 20px;
+    height: 10px;
+}
+
+.map-legend .swatch.no-data {
+    background: repeating-linear-gradient(45deg, #FFFFFF 0 2px, #CCCCCC 2px 4px);
+    border: 1px solid #ccc;
+}
+
+#mapCaption {
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+    margin: 8px 0 0;
+}
+
+@media (max-width: 700px) {
+    .map-legend {
+        position: static;
+        margin-top: 8px;
+    }
+}
+
+.chart-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+#Chart1 {
+    width: 100%;
+}
+
+#histogram {
+    flex: 1 1 auto;
+    height: auto;
+    padding: 10px;
+}
+
+.chart-container {
+    flex-wrap: nowrap;
+}
+
+@media (max-width: 768px) {
+    .chart-container {
+        flex-direction: column;
+    }
+
+    #histogram,
+    .content {
+        flex: 0 0 100%;
+    }
+}
+
+#piechart {
+    flex-basis: 600px;
+    height: 400px;
+}
+
+#parallelPlot {
+    flex-basis: 960px;
+    height: 500px;
+}
+
+#bargraph svg, #piechart svg, #histogram div, #parallelPlot svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+div > button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    background-color: var(--gill);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+div > button:hover {
+    background-color: var(--gill-dark);
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+/* The selected year */
+div > button[aria-pressed="true"] {
+    background-color: var(--accent);
+}
+
+button:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* Shared tooltip. (The old left/top/transform rules pushed every tooltip away from the cursor.) */
+.tooltip {
+    position: absolute;
+    text-align: left;
+    width: auto;
+    max-width: 260px;
+    padding: 8px 10px;
+    font: 13px/1.4 Arial, sans-serif;
+    background: rgba(0, 0, 0, 0.7); /* original tooltip color */
+    color: #FFFFFF;
+    border-radius: 5px;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.tooltip .note {
+    color: #E3DED8;
+    font-size: 12px;
+}
+
+@media (max-width: 1024px) {
+    .visualization-container {
+        flex-direction: column;
+    }
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Line chart: chart on the left, category buttons on the right */
+#my_dataviz {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+#my_dataviz svg {
+    flex: 1 1 640px;
+    max-width: 960px;
+    height: auto;
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 0 0 250px;
+}
+
+/* Category buttons keep their line colors (set in Histogram_Analysis.js) */
+.buttons-container .cat-btn {
+    width: 250px;
+    margin: 0;
+    padding: 10px;
+    font-size: 14px;
+    text-align: left;
+    color: #000;
+    border: 2px solid transparent;
+    border-radius: 5px;
+}
+
+.buttons-container .cat-btn:hover {
+    transform: none;
+    filter: brightness(0.92);
+}
+
+/* The selected button gets a dark outline; its color stays the same */
+.buttons-container .cat-btn[aria-pressed="true"] {
+    border-color: #000;
+    font-weight: bold;
+}
+
+.line-note {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 6px 0 0;
+}
+
+@media (max-width: 900px) {
+    #my_dataviz {
+        flex-direction: column;
+    }
+
+    #my_dataviz svg {
+        flex: none;
+        width: 100%;
+    }
+
+    .buttons-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        flex-basis: auto;
+    }
+
+    .buttons-container .cat-btn {
+        width: auto;
+    }
+}
+
+.Chart2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+#bargraph {
+    flex: 1;
+    height: 550px;
+    width: 250px;
+}
+
+.graph-text {
+    flex-basis: 30%;
+    max-width: 1000px;
+    padding: 0 20px;
+}
+
+.Chart3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.Text3 {
+    flex-basis: 40%;
+    max-width: 40%;
+    padding: 10px;
+}
+
+#parallelPlot {
+    flex-basis: 60%;
+    max-width: 60%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.Chart4 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.chart-text {
+    flex-basis: 40%;
+    padding: 10px;
+}
+
+.piechart-container {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+}
+
+
+/* Fade-in effect for the front page.
+   index.html adds the "fade-ready" class before the page is drawn, so these sections start hidden,
+   then a script adds "show" to each one as it scrolls into view. */
+.fade-ready :is(.title-bar, .intro > *, #map, #mapCaption, #Chart1 .content, #histogram, .Chart2 > *, .Chart3 > *) {
+    transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.fade-ready :is(.title-bar, .intro > *, #map, #mapCaption, #Chart1 .content, #histogram, .Chart2 > *, .Chart3 > *):not(.show) {
+    opacity: 0;
+    transform: translateY(24px);
+}
+
+/* Visitors who turn off animations in their system settings see everything straight away */
+@media (prefers-reduced-motion: reduce) {
+    .fade-ready :is(.title-bar, .intro > *, #map, #mapCaption, #Chart1 .content, #histogram, .Chart2 > *, .Chart3 > *) {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
 }

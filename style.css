@@ -1,194 +1,30 @@
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    overflow-x: hidden;
-    font-family: Arial, sans-serif;
+/* =========================================================
+   Theme: Grey and white mushroom
+   Shared by every page. Change a color here and it updates
+   the page colors across the whole site. Map and chart colors
+   are set in their own .js files and are not affected.
+   ========================================================= */
+:root {
+    --page:    #FFFFFF;  /* white cap: page background */
+    --surface: #F7F7F6;  /* off-white: chart and card background */
+    --stem:    #DEDDDB;  /* light grey: borders */
+    --cap:     #8E8D8A;  /* mushroom grey: details */
+    --gill:    #5F5E5B;  /* dark grey: buttons and title bar */
+    --gill-dark: #43423F;/* button hover */
+    --muted:   #595856;  /* secondary text */
+    --soil:    #2E2D2B;  /* main text */
+    --accent:  #2E2D2B;  /* selected buttons and links */
 }
 
-svg * {
-    pointer-events: all;
+body {
+    background-color: var(--page);
+    color: var(--soil);
 }
 
-.visualization-container {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    gap: 20px;
-    padding: 20px;
-    background-color: #ffffff;
+h1, h2, h3 {
+    color: var(--soil);
 }
 
-#map, #bargraph, #piechart, #histogram, #parallelPlot {
-    flex: 0 0 auto;
-    padding: 10px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(255, 251, 251, 0.1);
-    margin: 10px;
-    overflow: hidden;
+a {
+    color: var(--accent);
 }
-
-#map, #bargraph, #histogram, #parallelPlot {
-    border: none;
-}
-
-#map {
-    height: 400px;
-}
-
-.chart-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-}
-
-#histogram {
-    flex: 0 0 50%;
-    height: auto;
-    padding: 10px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(255, 253, 253, 0.1);
-}
-
-.chart-container {
-    flex-wrap: nowrap;
-}
-
-@media (max-width: 768px) {
-    .chart-container {
-        flex-direction: column;
-    }
-
-    #histogram,
-    .content {
-        flex: 0 0 100%;
-    }
-}
-
-#piechart {
-    flex-basis: 600px;
-    height: 400px;
-}
-
-#parallelPlot {
-    flex-basis: 960px;
-    height: 500px;
-}
-
-#bargraph svg, #piechart svg, #histogram div, #parallelPlot svg {
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-}
-
-div > button {
-    padding: 10px 20px;
-    margin-right: 10px;
-    background-color: #171617;  /* Lighter blue for better accessibility */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-div > button:hover {
-    background-color: #adadad; /* Darker blue on hover */
-    transform: scale(1.05); /* Slightly enlarge on hover */
-}
-
-.tooltip {
-    position: absolute;
-    text-align: center;
-    width: auto;
-    padding: 10px;
-    font: 12px Arial, sans-serif;
-    background: lightsteelblue;
-    border: 1px solid #000;
-    border-radius: 8px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-    z-index: 1000;
-    left: 50%;
-    transform: translateX(-50%);
-    top: -10px;
-}
-
-@media (max-width: 1024px) {
-    .visualization-container {
-        flex-direction: column;
-    }
-}
-
-.button-container {
-    text-align: center;
-    margin-top: 20px;
-}
-
-#my_dataviz {
-    display: flex;
-    justify-content: center;
-}
-
-.Chart2 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-}
-
-#bargraph {
-    flex: 1;
-    height: 550px;
-    width: 250px;
-}
-
-.graph-text {
-    flex-basis: 30%;
-    max-width: 1000px;
-    padding: 0 20px;
-}
-
-.Chart3 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-}
-
-.Text3 {
-    flex-basis: 40%;
-    max-width: 40%;
-    padding: 10px;
-}
-
-#parallelPlot {
-    flex-basis: 60%;
-    max-width: 60%;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.Chart4 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-}
-
-.chart-text {
-    flex-basis: 40%;
-    padding: 10px;
-}
-
-.piechart-container {
-    flex: 1;
-    display: flex;
-    justify-content: flex-start;
-}
-

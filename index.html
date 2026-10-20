@@ -5,16 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualization Dashboard</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="theme.css">
     <link rel="stylesheet" href="style.css">
+    <!-- Hide the sections before the page is first drawn, so they can fade in (see style.css) -->
+    <script>document.documentElement.classList.add("fade-ready");</script>
 </head>
 <body>
-    <div>
-        <h1 style="text-align: center;"> Emerging Trends in Data Workforce Development: A Graphic Perspective</h1>
+    <header class="title-bar">
+        <h1>Emerging Trends in Data Workforce Development: A Graphic Perspective</h1>
+    </header>
+    <div class="intro">
         <p>Greetings from our interactive tour of global data employment trends. The trend is that technology has contributed and continuously does so in changing the face of the work environment. This data platform tries to visually explain how the complex ecosystem works out there and the bird's view of how different regions adapt and evolve with the revolution of Data Economy. Here, we focus on the diversity and scale of different data professions at a global level, underlining the strategic importance of data roles within an industry. Take a deep plunge into the visual content to get insights into global patterns and opportunities defining the data-driven job market of today.<br></p>
         <h2>Mapping Data Job Compensation Globally</h2>
-        <p>Use our interactive map to compare average salaries for data-related jobs across countries. Filter by year to choose a specific timeframe and analyze salary levels for that year. These differences are visualized in the map with the use of a color gradient, with darker shades indicating higher average salaries, so it is easy to tell at once which countries pay the most in the chosen year. Delve into the data and discover salary trends from around the world to bring insight into the worldwide economic landscape of data professions. to compare average salaries for data-related jobs across countries. Filter by year to choose a specific timeframe and analyze salary levels for that year. These differences are visualized in the map with the use of a color gradient, with darker shades indicating higher average salaries, so it is easy to tell at once which countries pay the most in the chosen year. Delve into the data and discover salary trends from around the world to bring insight into the worldwide economic landscape of data professions. </p>
+        <p>Use our interactive map to compare average salaries for data-related jobs across countries. Filter by year to choose a specific timeframe and analyze salary levels for that year. These differences are visualized in the map with the use of a color gradient, with darker shades indicating higher average salaries, so it is easy to tell at once which countries pay the most in the chosen year. Delve into the data and discover salary trends from around the world to bring insight into the worldwide economic landscape of data professions. Drag to pan, scroll to zoom, and hover over a country for details.</p>
         <p>Discover Salary Evolution by Year:</p>
         <div class="button-container">
+            <button id="yearAll" aria-pressed="true">All years</button>
             <button id="year2020">2020</button>
             <button id="year2021">2021</button>
             <button id="year2022">2022</button>
@@ -23,16 +29,17 @@
     </div>
 
     <div id="map">
-        <svg id="mapSVG" width="1400" height="400"></svg>
-        <div id="tooltip" style="position: absolute; display: none;"></div>
+        <svg id="mapSVG" role="img" aria-label="World map of average data-job salaries by company location"></svg>
+        <div id="tooltip" class="tooltip" style="display: none;"></div>
     </div>
+    <p id="mapCaption" aria-live="polite">Loading the map…</p>
     <script src="Location_Analysis.js"></script>
 
     <div class="visualization-container">
         <div id="Chart1">
             <div class="content">
-                <h2>Monitoring Data Market Employment Prospects (2020–2023)</h2>
-                <p>This line graph shows an interesting overview of the employment trends in the data industry during 2020-2023. Every colored line traces the path of a different data-related specialization that ranges from Data Engineering to Cloud and Database Management, showing the dynamic changes within these jobs over the four-year period. Key insights are a big rise in demand for Machine Learning and AI and steady growth in the demand for Cloud and Database roles, representing an industrial shift into these territories. The graph visualizes the story of how the landscape of employment in data is changing and which functions are flying and which have relatively more fluctuating demands. It has therefore been a useful representation for professionals and students alike in understanding current trends and the career opportunities that may exist within the data sector.</p>
+                <h2>Monitoring Data Market Salary Trends (2020–2023)</h2>
+                <p>This line graph shows how average salaries in the data industry changed from 2020 to 2023. Every line traces a different data-related job category, ranging from Data Engineering to Cloud and Database, and is labeled at its end with the category name. Choose a category on the right to highlight its line and see its average salary for each year, or hover over any line. Some categories have only a handful of job records in early years, so those points are drawn hollow and should be read with caution. It is a useful view for professionals and students alike in understanding how pay is moving across the career paths within the data sector.</p>
             </div>
         <div id="histogram">
             <div id="my_dataviz"></div>
@@ -47,7 +54,7 @@
             <div class="graph-text">
                 <h2>Analysis of Average Pay by Data Job Type in Evaluation</h2>
                 <p>Next to this colorful bar chart is a detailed analysis of the average salaries of different job categories in the data sector. From Machine Learning and AI to Data Quality and Operations, the graph tells an interesting story of remuneration correlated with the demand and specialization expected of each role. It then becomes apparent that at least some knowledge, especially in the area of emerging technologies such as Machine Learning, demands higher salaries-a premium on skills leading the way in digital transformation. Professionals will find this information of utmost importance in their career choices, as the data gives an indication of remuneration expectation in the industry and also serves to illustrate the value placed upon specialized data skills within an open market.</p>
-                <text> To view additional comparison graphs <a href="button.html" style="font-size:large"><b> Click here</a>.</text>
+                <p>To view additional comparison graphs <a href="button.html" style="font-size:large"><b>click here</b></a>.</p>
             </div>
         </div>
         <script src="Bar_Chart_Comparison.js"></script>
@@ -62,6 +69,41 @@
             </div>
         </div>
         <script src="Parallel_Coord_Analysis.js"></script>
+
+    <script>
+        // Fade each section in as it scrolls into view.
+        // Sections already on screen when the page opens fade in one after another.
+        (function () {
+            const fadeItems = document.querySelectorAll(
+                ".title-bar, .intro > *, #map, #mapCaption, #Chart1 .content, #histogram, .Chart2 > *, .Chart3 > *"
+            );
+            const showAll = () => fadeItems.forEach(el => el.classList.add("show"));
+
+            if (!("IntersectionObserver" in window)) {
+                showAll();
+                return;
+            }
+
+            let firstBatch = true;
+            const fadeObserver = new IntersectionObserver(function (entries) {
+                let order = 0;
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        if (firstBatch) {
+                            entry.target.style.transitionDelay = Math.min(order * 0.15, 0.9) + "s";
+                            order++;
+                        }
+                        entry.target.classList.add("show");
+                        fadeObserver.unobserve(entry.target);
+                    }
+                });
+                firstBatch = false;
+            }, { threshold: 0.1 });
+
+            // Wait one frame so the hidden starting state is drawn before fading in
+            requestAnimationFrame(() => fadeItems.forEach(el => fadeObserver.observe(el)));
+        })();
+    </script>
 
 </body>
 </html>

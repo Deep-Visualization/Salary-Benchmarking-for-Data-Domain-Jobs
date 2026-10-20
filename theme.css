@@ -1,0 +1,30 @@
+/* =========================================================
+   Theme: Grey and white mushroom
+   Shared by every page. Change a color here and it updates
+   the page colors across the whole site. Map and chart colors
+   are set in their own .js files and are not affected.
+   ========================================================= */
+:root {
+    --page:    #FFFFFF;  /* white cap: page background */
+    --surface: #F7F7F6;  /* off-white: chart and card background */
+    --stem:    #DEDDDB;  /* light grey: borders */
+    --cap:     #8E8D8A;  /* mushroom grey: details */
+    --gill:    #5F5E5B;  /* dark grey: buttons and title bar */
+    --gill-dark: #43423F;/* button hover */
+    --muted:   #595856;  /* secondary text */
+    --soil:    #2E2D2B;  /* main text */
+    --accent:  #2E2D2B;  /* selected buttons and links */
+}
+
+body {
+    background-color: var(--page);
+    color: var(--soil);
+}
+
+h1, h2, h3 {
+    color: var(--soil);
+}
+
+a {
+    color: var(--accent);
+}

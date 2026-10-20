@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Compensation Comparison Visuals</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="theme.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,7 +17,7 @@
         }
         h1 { text-align: center; }
         .chart-container { display: none; margin-top: 20px; }
-        .chart { width: 100%; margin: 10px auto; padding: 10px; border: 1px solid #ccc; }
+        .chart { width: 100%; margin: 10px auto; padding: 10px; border: 1px solid var(--stem); background-color: var(--surface); }
         svg { width: 100%; height: 500px; }
         .dropdown-container {
             position: fixed;
@@ -45,21 +46,28 @@
 <div class="dropdown-container">
     <label for="chart-selector">Select Chart:</label>
     <select id="chart-selector">
-        <option value="none" selected disabled>Choose a chart</option>
-        <option value="company_size_chart">Compensation by Organization Scale</option>
+        <option value="company_size_chart" selected>Compensation by Organization Scale</option>
         <option value="work_setting_chart">Compensation by Work Environment</option>
         <option value="experience_level_chart">Compensation by Expertise Level</option>
     </select>
 </div>
 
 <script>
-    // Function to toggle visibility of charts based on dropdown selection
-    document.getElementById("chart-selector").addEventListener("change", function () {
-        const selectedValue = this.value;
+    // Show only the chart chosen in the dropdown
+    const chartSelector = document.getElementById("chart-selector");
+
+    function showChart(selectedValue) {
         document.querySelectorAll(".chart-container").forEach(chart => {
             chart.style.display = chart.id === selectedValue ? "block" : "none";
         });
+    }
+
+    chartSelector.addEventListener("change", function () {
+        showChart(this.value);
     });
+
+    // Start with the first chart showing instead of an empty page
+    showChart(chartSelector.value);
 
     // Function to create a bar chart
     function createBarChart(csvFile, svgId) {

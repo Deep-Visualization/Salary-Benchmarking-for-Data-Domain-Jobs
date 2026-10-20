@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Interactive Choices</title>
   <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link rel="stylesheet" href="theme.css">
   <style>
     /* Reset default body margin and padding */
     body {
@@ -53,7 +54,7 @@
       font-size: 1.1em;
       font-weight: bold;
       color: #fff;
-      background: linear-gradient(135deg, #727275, #eaebec);
+      background: var(--gill);
       border: none;
       border-radius: 12px;
       cursor: pointer;
@@ -63,13 +64,13 @@
     }
 
     .button:hover {
-      background: linear-gradient(135deg,  #727275, #eaebec);
+      background: var(--gill-dark);
       transform: scale(1.05);
     }
 
     .button:active {
       transform: scale(1.02);
-      background: linear-gradient(135deg,  #727275, #eaebec);
+      background: var(--accent);
     }
   </style>
 </head>
